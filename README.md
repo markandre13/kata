@@ -1,4 +1,4 @@
-# kata
+# The Coding Dojo Handbook: Mark's Solutions
 
 To install dependencies:
 
@@ -9,7 +9,5 @@ bun install
 To run:
 
 ```bash
-bun run index.ts
+bun test --watch
 ```
-
-This project was created using `bun init` in bun v0.6.3. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
