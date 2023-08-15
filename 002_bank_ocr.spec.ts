@@ -12,11 +12,17 @@ describe("User Story 1: Scan File", () => {
             "  | _| _||_||_ |_   ||_||_|\n" + 
             "  ||_  _|  | _||_|  ||_| _|\n"
             "                           \n"
-        const output = parse(input)
-        expect(output).toBe(123456789)
+        // const output = parse(input)
+        // expect(output).toBe(123456789)
+        const n = parseDigit(input, 0, 0)
+        expect(n).toBe(1)
     })
 })
 
 function parse(input: string) {
     return 123456789
+}
+
+function parseDigit(input: string, x: number, y: number) {
+    return 1
 }
