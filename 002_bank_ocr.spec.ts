@@ -26,43 +26,43 @@ describe("User Story 1: Scan File", () => {
         expect(output).toBe(12345678)
     })
     it("parseDigit() -> 0", () => {
-        const n = parseDigit(input1, 0, 0)
+        const n = scanDigit(input1, 0, 0)
         expect(n).toBe(0)
     })
     it("parseDigit() -> 1", () => {
-        const n = parseDigit(input0, 0, 0)
+        const n = scanDigit(input0, 0, 0)
         expect(n).toBe(1)
     })
     it("parseDigit() -> 2", () => {
-        const n = parseDigit(input0, 1, 0)
+        const n = scanDigit(input0, 1, 0)
         expect(n).toBe(2)
     })
     it("parseDigit() -> 3", () => {
-        const n = parseDigit(input0, 2, 0)
+        const n = scanDigit(input0, 2, 0)
         expect(n).toBe(3)
     })
     it("parseDigit() -> 4", () => {
-        const n = parseDigit(input0, 3, 0)
+        const n = scanDigit(input0, 3, 0)
         expect(n).toBe(4)
     })
     it("parseDigit() -> 5", () => {
-        const n = parseDigit(input0, 4, 0)
+        const n = scanDigit(input0, 4, 0)
         expect(n).toBe(5)
     })
     it("parseDigit() -> 6", () => {
-        const n = parseDigit(input0, 5, 0)
+        const n = scanDigit(input0, 5, 0)
         expect(n).toBe(6)
     })
     it("parseDigit() -> 7", () => {
-        const n = parseDigit(input0, 6, 0)
+        const n = scanDigit(input0, 6, 0)
         expect(n).toBe(7)
     })
     it("parseDigit() -> 8", () => {
-        const n = parseDigit(input0, 7, 0)
+        const n = scanDigit(input0, 7, 0)
         expect(n).toBe(8)
     })
     it("parseDigit() -> 9", () => {
-        const n = parseDigit(input0, 8, 0)
+        const n = scanDigit(input0, 8, 0)
         expect(n).toBe(9)
     })
 })
@@ -71,38 +71,38 @@ function parseAccountNumber(input: string) {
     let output = 0
     for(let x=0; x<9; ++x) {
         output *= 10
-        output += parseDigit(input, x, 0)
+        output += scanDigit(input, x, 0)
     }
     return output
 }
 
-function parseDigit(input: string, x: number, y: number) {
-    const pattern = [
-        " _ | ||_|",
-        "     |  |",
-        " _  _||_ ",
-        " _  _| _|",
-        "   |_|  |",
-        " _ |_  _|",
-        " _ |_ |_|",
-        " _   |  |",
-        " _ |_||_|",
-        " _ |_| _|"
-    ]
-    // we extract the number
+const knownDigits = new Map<string, number>([       
+    [" _ | ||_|", 0],
+    ["     |  |", 1],
+    [" _  _||_ ", 2],
+    [" _  _| _|", 3],
+    ["   |_|  |", 4],
+    [" _ |_  _|", 5],
+    [" _ |_ |_|", 6],
+    [" _   |  |", 7],
+    [" _ |_||_|", 8],
+    [" _ |_| _|", 9]
+])
+
+function scanDigit(input: string, x: number, y: number) {
+    // we extract the number's pattern
     x = x * 3
     y = y * 4
-    let s = ""
+    let pattern = ""
     for(let iy=y; iy<y+3; ++iy) {
         for(let ix=x; ix<x+3; ++ix) {
-            s += input.charAt(ix + iy * 28)
+            pattern += input.charAt(ix + iy * 28)
         }
     }
-    // then we just compare the resulting string
-    for(let patternIndex=0; patternIndex<pattern.length; ++patternIndex) {
-        if (s === pattern[patternIndex]) {
-            return patternIndex
-        }
+    // convert pattern to number
+    const n =  knownDigits.get(pattern)
+    if (n === undefined) {
+        throw Error(`failed to read number: '${pattern}'`)
     }
-    throw Error(`failed to read number: '${s}'`)
+    return n
 }
